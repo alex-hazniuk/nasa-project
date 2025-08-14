@@ -25,7 +25,7 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'https://jsonplaceholder.typicode.com',
-    baseURL: 'https://api.nasa.gov/planetary/apod',
+    // baseURL: 'https://api.nasa.gov/planetary/apod',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -34,8 +34,19 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: {},
+      name: 'jsonPlaceholder',
+      testDir: './tests/jsonPlaceholder',
+      use: {
+        baseURL: 'https://jsonplaceholder.typicode.com'
+      }
+    },
+
+    {
+      name: 'nasa-api',
+      testDir: './tests/nasa-api',
+      use: {
+        baseURL: 'https://api.nasa.gov/planetary/apod'
+      }
     },
 
     // {
