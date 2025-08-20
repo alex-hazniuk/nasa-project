@@ -49,6 +49,14 @@ export default defineConfig({
       }
     },
 
+    {
+      name: 'restfull-booker',
+      testDir: './tests/restfull-booker',
+      use: {
+        baseURL: 'https://restful-booker.herokuapp.com'
+      }
+    }
+
     // {
     //   name: 'chromium',
     //   use: { ...devices['Desktop Chrome'] },
