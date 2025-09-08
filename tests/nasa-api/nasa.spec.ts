@@ -219,3 +219,39 @@ test('JIRA-008 thumbs', { tag: ['@smoke'] }, async ({ request }) => {
     const body = await response.json();
     expect(body).toHaveProperty("hdurl");
 });
+
+
+// added expected result in test parameters
+const statusTest = [
+    {
+        testId: 'JIRA-004.1.1',
+        parameters: {
+            start_date: '2025-01-01',
+            api_key: API_KEY
+        },
+        expected: async response => {
+            expect(response.status()).toBe(200);
+            expect(response.headers()).toHaveProperty('x-ratelimit-remaining');
+            const body = await response.json();
+            expect(body.length).toBeGreaterThan(0);
+        }
+    },
+    {
+        testId: 'JIRA-004.1.2',
+        parameters: {
+            start_date: '2025',
+            api_key: API_KEY
+        },
+        expected: response => {
+            expect(response.status()).toBe(400);
+        }
+    }
+];
+
+for(const { testId, parameters, expected } of statusTest) {
+    test(`${testId} start date, expected result is in parameters`, { tag: ['@smoke'] }, async ({ request }) => {
+        // const response = await request.get(`?start_date=2025-01-01&api_key=${API_KEY}`);
+        const response = await request.get('', { params: parameters });
+        expected(response);
+    });
+}

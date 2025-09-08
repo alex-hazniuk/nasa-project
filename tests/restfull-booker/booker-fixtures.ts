@@ -1,6 +1,7 @@
 // 1)import { test } from '@playwright/test';
 // 2)import { test } from '@playwright/test';
 import { test as base, request as newRequest } from '@playwright/test'; // use alias
+import { log } from 'console';
 import fs from 'fs';
 
 // 'test' function is an object, when we can invoke methods on it = 'test.beforeAll'
@@ -29,7 +30,13 @@ import fs from 'fs';
 //     token: string
 // }
 // export const test = base.extend<Fixtures>({  // properties of this object are our fixtures
-export const test = base.extend({  // properties of this object are our fixtures
+
+type Fixtures = {
+    showMeRock: void
+    invokeMeAnyway: void
+}
+
+export const test = base.extend<Fixtures>({  // properties of this object are our fixtures
     //token: "Oleksandr",
     request: async ({ request }, use) => {
         let token;
@@ -69,5 +76,22 @@ export const test = base.extend({  // properties of this object are our fixtures
         await use(requestWithToken); // return
 
         console.log('--- test ended ---');
-    }
+    },
+
+    // auto fixtura and it works like before each
+    showMeRock: async ({}, use) => {
+        console.log('This is rock');
+        await use();
+    },
+
+    // auto fixtura work even without passing fixture in params
+    // before each, after each
+    invokeMeAnyway: [async ({}, use) => {
+        console.log('Before each'); // before each logic
+        
+        console.log('Invoke me anyway');
+        await use();
+        console.log('After each'); // after each logic
+        
+    }, { auto: true }]
 });
