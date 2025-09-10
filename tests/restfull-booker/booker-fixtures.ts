@@ -3,6 +3,7 @@
 import { test as base, request as newRequest } from '@playwright/test'; // use alias
 import { log } from 'console';
 import fs from 'fs';
+import { BookingBuilder } from './BookingBuilder';
 
 // 'test' function is an object, when we can invoke methods on it = 'test.beforeAll'
 // and can be by function like 'test(params.....)' function
@@ -32,8 +33,9 @@ import fs from 'fs';
 // export const test = base.extend<Fixtures>({  // properties of this object are our fixtures
 
 type Fixtures = {
-    showMeRock: void
-    invokeMeAnyway: void
+    showMeRock: void,
+    invokeMeAnyway: void,
+    bookerBuilder: BookingBuilder
 }
 
 export const test = base.extend<Fixtures>({  // properties of this object are our fixtures
@@ -93,5 +95,10 @@ export const test = base.extend<Fixtures>({  // properties of this object are ou
         await use();
         console.log('After each'); // after each logic
         
-    }, { auto: true }]
+    }, { auto: true }],
+
+    bookerBuilder: async ({}, use) => {
+        const builder = new BookingBuilder();
+        use(builder);
+    }
 });
